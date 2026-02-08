@@ -1,0 +1,244 @@
+/* BAGIAN 1: CSS BASIC SETTINGS 
+   Mengatur font dan warna dasar
+*/
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+body {
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+    background-color: #000000; /* Dark theme */
+    color: #ffffff;
+    overflow-x: hidden;
+    /* Menyembunyikan cursor default jika ingin full custom, 
+       tapi untuk library ini lebih baik biarkan default atau set ke auto */
+    cursor: auto; 
+}
+
+/* BAGIAN 2: ANIMASI KEYFRAMES (Looping) */
+@keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+}
+
+@keyframes glow {
+    0% { box-shadow: 0 0 5px #6366f1; }
+    50% { box-shadow: 0 0 20px #818cf8, 0 0 40px #6366f1; }
+    100% { box-shadow: 0 0 5px #6366f1; }
+}
+
+.animate-float {
+    animation: floating 2s ease-in-out infinite;
+}
+
+.animate-glow {
+    animation: glow 2s infinite;
+}
+
+/* BAGIAN 3: ANIMASI TRANSISI (Hover Effects) */
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-10px) scale(1.02);
+    background-color: #1e293b;
+    border-color: #6366f1;
+    /* Ubah cursor saat hover card */
+    cursor: pointer;
+}
+
+/* BAGIAN 4: ANIMASI SCROLL (Initial State) */
+.reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal-left {
+    opacity: 0;
+    transform: translateX(-50px);
+    transition: all 0.8s ease-out;
+}
+.reveal-left.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+    background: #4f46e5;
+    border-radius: 5px;
+}
+/* Pastikan cursor effect muncul di atas semua elemen */
+[data-cursor-effect] {
+    z-index: 9999 !important;
+    pointer-events: none !important;
+}
+
+[data-cursor-effect] * {
+    pointer-events: none !important;
+}
+nav {
+    pointer-events: none; /* Navbar tidak menangkap event mouse */
+}
+
+nav * {
+    pointer-events: auto; /* Tapi elemen di dalamnya tetap bisa diklik */
+}
+
+/* ✅ CSS untuk Cursor Effect */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+/* Cursor effect muncul di atas semua elemen */
+[data-cursor-effect],
+[data-cursor-effect] * {
+    z-index: 9999 !important;
+    pointer-events: none !important;
+}
+
+/* Navbar tetap bisa diklik */
+nav {
+    pointer-events: auto !important;
+}
+
+/* Leaflet map tidak menghalangi cursor */
+.leaflet-container {
+    pointer-events: auto !important;
+}
+
+body{
+    background:#0b0f19 url('https://www.transparenttextures.com/patterns/old-paper.png');
+    background-blend-mode:multiply;
+    color:white;
+}
+/* Reveal */
+.reveal{opacity:0; transform:translateY(40px); transition:all .8s ease;}
+.reveal.active{opacity:1; transform:translateY(0);}
+
+/* Sword Animation */
+@keyframes swing{
+0%{transform:rotate(-20deg);}
+50%{transform:rotate(10deg);}
+100%{transform:rotate(-20deg);}
+}
+.sword{
+animation:swing 3s infinite ease-in-out;
+transform-origin:top center;
+}
+
+/* Map hover */
+.map-region{
+fill:#7f1d1d;
+transition:.3s;
+cursor:pointer;
+}
+.map-region:hover{
+fill:#dc2626;
+}
+#map {
+    height: 500px;
+    border-radius: 12px;
+    border: 1px solid #7f1d1d;
+    position: relative;
+    z-index: 1;
+}
+.leaflet-popup-content-wrapper {
+    background: #111827;
+    color: #e5e7eb;
+}
+.leaflet-popup-tip {
+    background: #111827;
+}
+
+/* Family Tree Styles */
+.family-tree {
+    position: relative;
+    padding: 40px 0;
+    z-index: 1;
+}
+
+.family-tree::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    width: 2px;
+    background: linear-gradient(to bottom, #7f1d1d, #dc2626);
+    transform: translateX(-50%);
+}
+
+.family-tree-line {
+    position: absolute;
+    width: 2px;
+    background: linear-gradient(to right, transparent, #7f1d1d, transparent);
+}
+
+.family-node {
+    position: relative;
+    text-align: center;
+    padding: 20px;
+    border-radius: 12px;
+    background: rgba(17, 24, 39, 0.8);
+    border: 2px solid #7f1d1d;
+    transition: all 0.3s ease;
+    z-index: 1;
+}
+
+.family-node:hover {
+    border-color: #dc2626;
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+}
+
+.family-node img {
+    width: 120px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #7f1d1d;
+    margin-bottom: 12px;
+}
+
+.family-node h3 {
+    font-size: 1.1rem;
+    color: #dc2626;
+    margin-bottom: 4px;
+}
+
+.family-node p {
+    font-size: 0.85rem;
+    color: #9ca3af;
+}
+
+/* Responsive Family Tree */
+@media (max-width: 768px) {
+    .family-tree::before {
+        display: none;
+    }
+    
+    .family-tree-line {
+        display: none;
+    }
+    
+    .family-node {
+        margin-bottom: 30px;
+    }
+}

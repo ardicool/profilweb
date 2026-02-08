@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cesare Borgia | Renaissance Power Architecture</title>
+<!-- ✅ Hapus trailing spaces -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/cursor-effects@latest/dist/browser.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<link rel="stylesheet" href="/css/style.css"/>
+
+
+</head>
+
+<body>
+
+<nav class="fixed w-full z-50 bg-black/80 backdrop-blur border-b border-red-900">
+<div class="container mx-auto px-6 py-4 flex justify-between">
+<div class="text-xl font-bold text-red-600">Cesare Borgia</div>
+<a href="https://en.wikipedia.org/wiki/Cesare_Borgia" target="_blank"
+class="bg-red-700 px-4 py-2 rounded text-sm">Wikipedia</a>
+</div>
+</nav>
+
+<!-- HERO -->
+<section class="min-h-screen flex items-center pt-24">
+<div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+
+    <!-- Foto Profil -->
+    <div class="reveal">
+        <img src="https://media.gettyimages.com/id/1939586597/vector/portrait-of-cesare-borgia-an-italian-cardinal-and-condottiero-mercenary-leader-renaissance.jpg?s=612x612&w=gi&k=20&c=093HYLiqigxCGi1znSnzmYjFfZ4T9Lkc2Kiwp7R3_g0="
+             alt="Portrait of Cesare Borgia"
+             class="w-full max-w-sm mx-auto rounded-xl border border-red-800 shadow-lg">
+    </div>
+
+    <!-- Teks Hero -->
+    <div class="text-center md:text-left reveal">
+        <h1 class="text-5xl font-bold mb-4 text-red-600">
+            Cesare Borgia
+        </h1>
+        <p class="text-slate-300 text-lg mb-4">
+            Duke of Romagna. Seorang tokoh Realpolitik Renaissance yang menjadi model studi dalam karya Niccolò Machiavelli.
+        </p>
+
+        <!-- Icon Sword -->
+        <svg class="mx-auto md:mx-0 sword mb-6" width="60" height="180" viewBox="0 0 100 300">
+            <rect x="45" y="20" width="10" height="180" fill="#ccc"/>
+            <rect x="30" y="200" width="40" height="15" fill="#999"/>
+            <rect x="42" y="215" width="16" height="60" fill="#7f1d1d"/>
+        </svg>
+
+        <div class="space-x-4">
+            <a href="https://en.wikipedia.org/wiki/Cesare_Borgia" target="_blank"
+               class="underline text-red-400">Wikipedia</a>
+            <a href="https://www.britannica.com/biography/Cesare-Borgia" target="_blank"
+               class="underline text-red-400">Britannica</a>
+        </div>
+    </div>
+
+</div>
+</section>
+
+<!-- Biography SECTION -->
+<section class="py-20 bg-black/70 border-t border-red-900">
+<div class="container mx-auto px-6">
+    <div class="text-center mb-16 reveal">
+        <h2 class="text-4xl font-bold text-red-600 mb-4">
+            Biografi Singkat Cesare Borgia
+        </h2>
+        <p class="text-slate-400 max-w-3xl mx-auto">
+            Cesare Borgia (1475–1507) adalah seorang tokoh politik dan militer Italia pada masa Renaissance. Sebagai putra Paus Alexander VI, ia memanfaatkan hubungan keluarganya untuk memperluas kekuasaan dan pengaruhnya di Italia tengah. Awalnya ditahbiskan sebagai kardinal, Cesare kemudian melepaskan jabatan keagamaannya untuk menjadi seorang condottiero (pemimpin tentara bayaran) dan penguasa wilayah Romagna. Ia dikenal karena kecerdasan strategisnya, reformasi administratif yang efektif, serta pendekatan brutal terhadap penaklukan dan pemerintahan. Cesare sering dianggap sebagai inspirasi bagi Niccolò Machiavelli dalam karya terkenalnya, "The Prince", yang menyoroti realpolitik dan pragmatisme dalam pemerintahan. Meskipun kariernya berakhir tragis setelah kematian ayahnya dan kehilangan dukungan politik, warisannya sebagai tokoh kontroversial dan visioner tetap dikenang dalam sejarah Italia.
+        </p>
+    </div>
+</div>
+</section>
+
+<!-- War Timeline Section -->
+<section class="py-20">
+<div class="container mx-auto px-6 reveal">
+    <h2 class="text-4xl font-bold text-red-600 text-center mb-12">
+        Garis Waktu Penaklukan Romagna oleh Cesare Borgia (1499–1502)
+    </h2>
+    <div class="relative max-w-4xl mx-auto">
+        <!-- Vertical Line -->
+        <div class="absolute left-1/2 transform -translate-x-1/2 h-full border-l-2 border-red-600"></div>
+
+        <!-- Timeline Items -->
+        <div class="space-y-12">
+            <!-- Item 1 -->
+            <div class="flex items-start">
+                <div class="w-1/2 pr-8 text-right">
+                    <h3 class="text-2xl font-bold text-red-600">1499: Penaklukan Imola</h3>
+                    <p class="text-slate-400">
+                        Dengan dukungan militer dari Prancis, Cesare berhasil merebut Imola tanpa perlawanan besar. Ia mempertahankan struktur administratif lokal untuk memastikan stabilitas.
+                    </p>
+                </div>
+                <div class="w-8 h-8 bg-red-600 rounded-full border-4 border-black mt-1"></div>
+            </div>
+            <!-- Item 2 -->
+            <div class="flex items-start">
+                <div class="w-1/2 pl-8">
+                    <div class="w-8 h-8 bg-red-600 rounded-full border-4 border-black mt-1"></div>
+                </div>
+                <div class="w-1/2 pl-8">
+                    <h3 class="text-2xl font-bold text-red-600">1500: Pengepungan Forlì</h3>
+                    <p class="text-slate-400">
+                        Forlì, yang dipertahankan oleh Caterina Sforza, menjadi target utama. Setelah pengepungan yang intens, kota tersebut jatuh ke tangan Borgia, memperkuat reputasinya sebagai pemimpin militer yang tangguh.
+                    </p>
+                </div>
+            </div>
+            <!-- Item 3 -->
+            <div class="flex items-start">
+                <div class="w-1/2 pr-8 text-right">
+                    <h3 class="text-2xl font-bold text-red-600">1502: Penaklukan Cesena</h3>
+                    <p class="text-slate-400">
+                        Setelah menstabilkan wilayah yang telah ditaklukkan, Cesare menunjuk Remirro de Orco untuk menegakkan hukum dengan tangan besi di Cesena. Eksekusi publik Remirro kemudian digunakan untuk membangun citra keadilan tegas.
+                    </p>
+                </div>
+                <div class="w-8 h-8 bg-red-600 rounded-full border-4 border-black mt-1"></div>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+
+<!-- FAMILY TREE SECTION -->
+<section class="py-20 bg-black/70 border-t border-red-900">
+<div class="container mx-auto px-6">
+    <div class="text-center mb-16 reveal">
+        <h2 class="text-4xl font-bold text-red-600 mb-4">
+            Silsilah Keluarga Borgia
+        </h2>
+        <p class="text-slate-400">
+            Dinasti yang mendominasi politik Renaissance Italia
+        </p>
+    </div>    
+
+    <!-- Family Tree Container -->
+    <div class="family-tree max-w-6xl mx-auto relative reveal">
+        
+        <!-- GENERATION 1: Parents -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
+            <!-- Father: Rodrigo Borgia (Pope Alexander VI) -->
+            <div class="family-node mx-auto">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Pope_Alexander_VI.jpg/800px-Pope_Alexander_VI.jpg"
+                     alt="Rodrigo Borgia (Pope Alexander VI)"
+                     onerror="this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl2M9FtOYvFaMZSjpcVrf8Ch8-39Bqn0BdXmZjcKtnwbqO-mOabF1tDzx8PyHR_XnwPRzbXYHBiLFoZhMZKMs9x1DOUPH_6tptUOI_a7m3KCaLG0uJTAD3wN6O1QkOw9BU&s=10&ec=121528423'">
+                <h3>Rodrigo Borgia</h3>
+                <p class="text-sm">Paus Alexander VI (1431-1503)</p>
+                <p class="text-xs mt-2 text-slate-500">
+                    Ayah Cesare, Paus dari 1492-1503. Politisi ulung yang memanfaatkan kepausan untuk kekuasaan keluarga.
+                </p>
+                <a href="https://en.wikipedia.org/wiki/Pope_Alexander_VI" target="_blank" class="text-red-400 text-xs underline mt-2 block">
+                    Wikipedia
+                </a>
+            </div>
+
+            <!-- Mother: Vannozza dei Cattanei -->
+            <div class="family-node mx-auto">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwSANEFSzJ9YHt7QFfQ6XrzkA0l0nag8Z7FQQsp0Vy0T14Qygk_SSdxh3MrTWwQ-4EQ-hEtV1oUojz58bb-YzLvoRl36khIJ05mGqCKKoxcJWwUMO5WUedwcZhGOJH7qj0&s=10&ec=121528423"
+                     alt="Vannozza dei Cattanei"
+                     onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Vannozza_Cattanei.jpg/800px-Vannozza_Cattanei.jpg'">
+                <h3>Vannozza dei Cattanei</h3>
+                <p class="text-sm">Gundik Rodrigo Borgia (1442-1518)</p>
+                <p class="text-xs mt-2 text-slate-500">
+                    Ibu Cesare dan saudara-saudaranya. Wanita berpengaruh yang menjadi favorit Rodrigo selama bertahun-tahun.
+                </p>
+                <a href="https://en.wikipedia.org/wiki/Vannozza_dei_Cattanei" target="_blank" class="text-red-400 text-xs underline mt-2 block">
+                    Wikipedia
+                </a>
+            </div>
+        </div>
+
+        <!-- Connection Line to Children -->
+        <div class="family-tree-line" style="top: 180px; left: 25%; right: 25%; height: 40px;"></div>
+
+        <!-- GENERATION 2: Children -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <!-- Giovanni Borgia -->
+            <div class="family-node mx-auto">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/Juan_de_Borja_Llan%C3%A7ol_de_Roman%C3%AD%2C_el_mayor.jpg"
+                     alt="Giovanni Borgia"
+                     onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Giovanni_Borgia.jpg/800px-Giovanni_Borgia.jpg'">
+                <h3>Giovanni Borgia</h3>
+                <p class="text-sm">Duke of Gandia (1474-1497)</p>
+                <p class="text-xs mt-2 text-slate-500">
+                    Kakak Cesare. Dibunuh secara misterius di Roma, kematian yang memicu spekulasi besar.
+                </p>
+                <a href="https://en.wikipedia.org/wiki/Giovanni_Borgia,_2nd_Duke_of_Gandia" target="_blank" class="text-red-400 text-xs underline mt-2 block">
+                    Wikipedia
+                </a>
+            </div>
+
+            <!-- Cesare Borgia -->
+            <div class="family-node mx-auto border-4 border-red-600 shadow-lg shadow-red-500/30">
+                <img src="https://media.gettyimages.com/id/1939586597/vector/portrait-of-cesare-borgia-an-italian-cardinal-and-condottiero-mercenary-leader-renaissance.jpg?s=612x612&w=gi&k=20&c=093HYLiqigxCGi1znSnzmYjFfZ4T9Lkc2Kiwp7R3_g0="
+                     alt="Cesare Borgia">
+                <h3 class="text-2xl font-bold">Cesare Borgia</h3>
+                <p class="text-sm font-semibold">Duke of Romagna (1475-1507)</p>
+                <p class="text-xs mt-2 text-slate-500">
+                    Tokoh utama. Mantan Kardinal yang menjadi condottiero. Model Machiavelli dalam "The Prince".
+                </p>
+                <a href="https://en.wikipedia.org/wiki/Cesare_Borgia" target="_blank" class="text-red-400 text-xs underline mt-2 block">
+                    Wikipedia
+                </a>
+            </div>
+
+            <!-- Lucrezia Borgia -->
+            <div class="family-node mx-auto">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlCIdyNGN17fP8brrxt4qTdIyf_u3YahMipBaPplUm7xFJeLeQNVMnIPWKsc5cK2TcfPMPSdvfTBdIo1-f_jFEbbLj4DOv4d0A-3DWffjrVPr1yNeMh_SjmBbDhZwH71g&s=10&ec=121528423"
+                     alt="Lucrezia Borgia"
+                     onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Lucrezia_Borgia.jpg/800px-Lucrezia_Borgia.jpg'">
+                <h3>Lucrezia Borgia</h3>
+                <p class="text-sm">Duchess of Ferrara (1480-1519)</p>
+                <p class="text-xs mt-2 text-slate-500">
+                    Saudara perempuan Cesare. Politikus ulung dan patron seni. Reputasinya sebagai "venomous" sering dibesar-besarkan.
+                </p>
+                <a href="https://en.wikipedia.org/wiki/Lucrezia_Borgia" target="_blank" class="text-red-400 text-xs underline mt-2 block">
+                    Wikipedia
+                </a>
+            </div>
+
+            <!-- Jofré Borgia -->
+            <div class="family-node mx-auto">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPZisJHp8YGGkYLsbQdD9AaR5LiPCQZbY5Tw&s"
+                     alt="Jofré Borgia"
+                     onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Jofre_Borgia.jpg/800px-Jofre_Borgia.jpg'">
+                <h3>Jofré Borgia</h3>
+                <p class="text-sm">Prince of Squillace (1482-1517)</p>
+                <p class="text-xs mt-2 text-slate-500">
+                    Adik bungsu. Menikah dengan putri Napoli untuk aliansi politik. Kurang aktif dalam politik keluarga.
+                </p>
+                <a href="https://en.wikipedia.org/wiki/Jofr%C3%A9_Borgia" target="_blank" class="text-red-400 text-xs underline mt-2 block">
+                    Wikipedia
+                </a>
+            </div>
+           
+        </div>       
+    </div>
+</div>
+</section>
+
+<!-- MAP -->
+<section class="py-20 bg-black/70">
+<div class="container mx-auto px-6 text-center reveal">
+<h2 class="text-4xl font-bold text-red-600 mb-10">
+Ekspansi Wilayah Romagna (1499–1502)
+</h2>
+
+<div id="map" class="mx-auto max-w-4xl"></div>
+
+<p class="text-slate-400 mt-6 text-sm">
+Klik marker untuk membaca cerita penaklukan.
+</p>
+</div>
+</section>
+
+<!-- SWOT -->
+<section class="py-20">
+<div class="container mx-auto px-6 reveal">
+<h2 class="text-4xl font-bold text-red-600 text-center mb-12">
+SWOT Analysis (Modern Interpretation)
+</h2>
+
+<div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+
+<!-- Strength -->
+<div class="bg-black p-6 border border-green-600 rounded-xl">
+<h3 class="text-green-500 font-bold mb-4">Strength</h3>
+<ul class="text-slate-400 text-sm space-y-2">
+<li>• Konsolidasi cepat wilayah terfragmentasi</li>
+<li>• Reformasi administratif efektif</li>
+<li>• Adaptasi geopolitik Prancis–Spanyol</li>
+</ul>
+</div>
+
+<!-- Weakness -->
+<div class="bg-black p-6 border border-red-600 rounded-xl">
+<h3 class="text-red-500 font-bold mb-4">Weakness</h3>
+<ul class="text-slate-400 text-sm space-y-2">
+<li>• Ketergantungan pada Paus Alexander VI</li>
+<li>• Legitimasi lemah</li>
+<li>• Reputasi brutal</li>
+</ul>
+</div>
+
+<!-- Opportunity -->
+<div class="bg-black p-6 border border-blue-600 rounded-xl">
+<h3 class="text-blue-500 font-bold mb-4">Opportunity</h3>
+<ul class="text-slate-400 text-sm space-y-2">
+<li>• Fragmentasi Italia abad ke-15</li>
+<li>• Konflik kekuatan asing</li>
+<li>• Reformasi pemerintahan lokal</li>
+</ul>
+</div>
+
+<!-- Threat -->
+<div class="bg-black p-6 border border-yellow-600 rounded-xl">
+<h3 class="text-yellow-400 font-bold mb-4">Threat</h3>
+<ul class="text-slate-400 text-sm space-y-2">
+<li>• Pergantian Paus</li>
+<li>• Aliansi Spanyol</li>
+<li>• Resistensi lokal</li>
+</ul>
+</div>
+
+</div>
+</div>
+</section>
+
+<!-- YOUTUBE VIDEOS SECTION -->
+<section class="py-20 bg-black/70 border-t border-red-900">
+<div class="container mx-auto px-6">
+    <div class="text-center mb-16 reveal">
+        <h2 class="text-4xl font-bold text-red-600 mb-4">
+            <i class="fa-brands fa-youtube mr-3"></i>
+            Dokumenter & Analisis
+        </h2>
+        <p class="text-slate-400">
+            Video dokumenter dan analisis mendalam tentang Cesare Borgia
+        </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        
+        <!-- Video 1: Cesare Borgia Documentary -->
+        <div class="reveal">
+            <div class="bg-black/50 rounded-xl overflow-hidden border border-red-900/50 hover:border-red-600 transition-all duration-300">
+                <div class="aspect-video relative group cursor-pointer">
+                    <iframe 
+                        src="https://www.youtube.com/embed/qsUgOorF1oA  " 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen
+                        class="w-full h-full"
+                        title="Cesare Borgia Documentary">
+                    </iframe>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute bottom-4 left-4">
+                            <h3 class="text-xl font-bold text-white mb-2">Cesare Borgia: The Ruthless Prince</h3>
+                            <p class="text-slate-300 text-sm">History Channel Documentary</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-red-600 mb-2">Cesare Borgia: The Ruthless Prince</h3>
+                    <p class="text-slate-400 text-sm mb-3">
+                        Dokumenter komprehensif tentang kehidupan dan karier Cesare Borgia, mengeksplorasi ambisinya, strategi militer, dan pengaruhnya terhadap politik Renaissance.
+                    </p>
+                    <div class="flex items-center justify-between text-xs text-slate-500">
+                        <span><i class="fa-solid fa-clock mr-1"></i> 45 menit</span>
+                        <span><i class="fa-solid fa-eye mr-1"></i> History Channel</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video 2: Machiavelli's The Prince -->
+        <div class="reveal" style="transition-delay: 100ms;">
+            <div class="bg-black/50 rounded-xl overflow-hidden border border-red-900/50 hover:border-red-600 transition-all duration-300">
+                <div class="aspect-video relative group cursor-pointer">
+                    <iframe 
+                        src="https://www.youtube.com/embed/EwWg2MDvHDI  " 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen
+                        class="w-full h-full"
+                        title="Machiavelli's The Prince">
+                    </iframe>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute bottom-4 left-4">
+                            <h3 class="text-xl font-bold text-white mb-2">Machiavelli's The Prince Explained</h3>
+                            <p class="text-slate-300 text-sm">Philosophy & Political Theory</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-red-600 mb-2">Machiavelli's The Prince Explained</h3>
+                    <p class="text-slate-400 text-sm mb-3">
+                        Analisis mendalam tentang karya Niccolò Machiavelli yang terinspirasi oleh Cesare Borgia, menjelaskan konsep realpolitik dan kepemimpinan yang efektif.
+                    </p>
+                    <div class="flex items-center justify-between text-xs text-slate-500">
+                        <span><i class="fa-solid fa-clock mr-1"></i> 28 menit</span>
+                        <span><i class="fa-solid fa-book mr-1"></i> Philosophy Tube</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video 3: The Borgias Family -->
+        <div class="reveal" style="transition-delay: 200ms;">
+            <div class="bg-black/50 rounded-xl overflow-hidden border border-red-900/50 hover:border-red-600 transition-all duration-300">
+                <div class="aspect-video relative group cursor-pointer">
+                    <iframe 
+                        src="https://www.youtube.com/embed/JF8kMy1pvnI" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen
+                        class="w-full h-full"
+                        title="The Borgia Family">
+                    </iframe>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute bottom-4 left-4">
+                            <h3 class="text-xl font-bold text-white mb-2">The Borgia Family: Power & Corruption</h3>
+                            <p class="text-slate-300 text-sm">Renaissance Dynasty</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-red-600 mb-2">The Borgia Family: Power & Corruption</h3>
+                    <p class="text-slate-400 text-sm mb-3">
+                        Eksplorasi dinasti Borgia secara keseluruhan, termasuk Rodrigo (Paus Alexander VI), Cesare, Lucrezia, dan pengaruh mereka terhadap Vatikan dan politik Italia.
+                    </p>
+                    <div class="flex items-center justify-between text-xs text-slate-500">
+                        <span><i class="fa-solid fa-clock mr-1"></i> 52 menit</span>
+                        <span><i class="fa-solid fa-landmark mr-1"></i> National Geographic</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Video 4: Renaissance Warfare -->
+        <div class="reveal" style="transition-delay: 300ms;">
+            <div class="bg-black/50 rounded-xl overflow-hidden border border-red-900/50 hover:border-red-600 transition-all duration-300">
+                <div class="aspect-video relative group cursor-pointer">
+                    <iframe 
+                        src="https://www.youtube.com/embed/9LG1_0BFmRM" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen
+                        class="w-full h-full"
+                        title="Renaissance Warfare">
+                    </iframe>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div class="absolute bottom-4 left-4">
+                            <h3 class="text-xl font-bold text-white mb-2">Renaissance Warfare & Cesare's Tactics</h3>
+                            <p class="text-slate-300 text-sm">Military History Analysis</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-red-600 mb-2">Renaissance Warfare & Cesare's Tactics</h3>
+                    <p class="text-slate-400 text-sm mb-3">
+                        Analisis strategi militer Cesare Borgia, termasuk penggunaan artileri, taktik pengepungan, dan reformasi tentara yang membuatnya menjadi condottiero paling ditakuti.
+                    </p>
+                    <div class="flex items-center justify-between text-xs text-slate-500">
+                        <span><i class="fa-solid fa-clock mr-1"></i> 35 menit</span>
+                        <span><i class="fa-solid fa-shield-halved mr-1"></i> Military History Visualized</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Additional Video Links -->
+    <div class="mt-16 text-center reveal">
+        <h3 class="text-2xl font-bold text-red-600 mb-6">Video Tambahan</h3>
+        <div class="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ  " target="_blank" class="bg-black/50 p-4 rounded-lg border border-red-900/30 hover:border-red-600 transition-all text-left group">
+                <div class="flex items-start gap-3">
+                    <div class="w-12 h-12 bg-red-600/20 rounded flex items-center justify-center flex-shrink-0">
+                        <i class="fa-brands fa-youtube text-red-500"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-red-400 group-hover:text-red-300 transition-colors">Caterina Sforza vs Cesare Borgia</h4>
+                        <p class="text-xs text-slate-500 mt-1">The Battle of Forlì Explained</p>
+                    </div>
+                </div>
+            </a>
+
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ  " target="_blank" class="bg-black/50 p-4 rounded-lg border border-red-900/30 hover:border-red-600 transition-all text-left group">
+                <div class="flex items-start gap-3">
+                    <div class="w-12 h-12 bg-red-600/20 rounded flex items-center justify-center flex-shrink-0">
+                        <i class="fa-brands fa-youtube text-red-500"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-red-400 group-hover:text-red-300 transition-colors">Lucrezia Borgia: Myth vs Reality</h4>
+                        <p class="text-xs text-slate-500 mt-1">The Truth Behind the Legend</p>
+                    </div>
+                </div>
+            </a>
+
+            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ  " target="_blank" class="bg-black/50 p-4 rounded-lg border border-red-900/30 hover:border-red-600 transition-all text-left group">
+                <div class="flex items-start gap-3">
+                    <div class="w-12 h-12 bg-red-600/20 rounded flex items-center justify-center flex-shrink-0">
+                        <i class="fa-brands fa-youtube text-red-500"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-red-400 group-hover:text-red-300 transition-colors">The Fall of Cesare Borgia</h4>
+                        <p class="text-xs text-slate-500 mt-1">From Power to Exile</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+</div>
+</section>
+
+<footer class="bg-black py-8 text-center text-slate-600 text-sm">
+Renaissance Political Case Study | Cesare Borgia
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded',()=>{
+    // ✅ Inisialisasi Cursor Effect dengan target yang benar
+    new cursoreffects.ghostCursor({
+        colors:["#7f1d1d","#b91c1c","#ef4444"],
+        element: document.documentElement,  // ✅ Target seluruh viewport
+        size: 8,
+        density: 15,  // ✅ Lebih banyak partikel
+        opacity: 0.8,
+        speed: 0.5
+    });
+    
+    // ✅ Intersection Observer untuk animasi scroll
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    
+    // === LEAFLET MAP INITIALIZATION ===
+    const map = L.map('map').setView([44.2, 12.0], 8);
+
+    // Base layer (OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // ✅ Custom red icon tanpa trailing spaces
+    const redIcon = L.icon({
+        iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+        iconSize: [25, 41],
+        iconAnchor: [12, 41]
+    });
+
+    // === MARKERS WITH STORY ===
+    L.marker([44.3537, 11.7140], {icon: redIcon})
+    .addTo(map)
+    .bindPopup(`
+    <h3 style="color:#dc2626;">Imola (1499)</h3>
+    <p>
+    Imola menjadi salah satu kota pertama yang ditaklukkan.
+    Borgia memanfaatkan dukungan militer Prancis.
+    Alih-alih menghancurkan struktur lokal, ia mempertahankan
+    administrasi untuk stabilitas cepat.
+    </p>
+    `);
+
+    L.marker([44.2227, 12.0407], {icon: redIcon})
+    .addTo(map)
+    .bindPopup(`
+    <h3 style="color:#dc2626;">Forlì (1500)</h3>
+    <p>
+    Forlì dipertahankan oleh Caterina Sforza.
+    Setelah pengepungan intens, kota jatuh.
+    Kemenangan ini memperkuat reputasi militer Borgia
+    sebagai condottiero efektif.
+    </p>
+    `);
+
+    L.marker([44.1391, 12.2464], {icon: redIcon})
+    .addTo(map)
+    .bindPopup(`
+    <h3 style="color:#dc2626;">Cesena (1502)</h3>
+    <p>
+    Setelah stabilisasi wilayah, Borgia menunjuk Remirro de Orco
+    untuk menegakkan hukum dengan keras.
+    Eksekusi publik Remirro kemudian digunakan untuk
+    membangun citra keadilan tegas.
+    </p>
+    `);
+});
+</script>
+
+</body>
+</html>
