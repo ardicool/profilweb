@@ -1,596 +1,970 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cesare Borgia | Renaissance Power Architecture</title>
-<!-- ✅ Hapus trailing spaces -->
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="https://unpkg.com/cursor-effects@latest/dist/browser.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Undangan Pernikahan – Aditya & Rika</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=EB+Garamond:ital@0;1&family=Jost:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-<link rel="stylesheet" href="/css/style.css"/>
+    :root {
+      --cream:   #f7f0e6;
+      --cream2:  #ede4d4;
+      --brown:   #6b4c35;
+      --gold:    #b8975a;
+      --green:   #4a6741;
+      --green2:  #7a9e72;
+      --rose:    #c97b84;
+      --rose2:   #e8b4b8;
+      --text:    #3d2b1f;
+      --light:   #f9f5ef;
+    }
 
+    html { scroll-behavior: smooth; }
 
+    body {
+      background: var(--cream);
+      color: var(--text);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9999; opacity: .35;
+    }
+
+    /* ─── ENVELOPE INTRO ─── */
+    #envelope-screen {
+      position: fixed; inset: 0;
+      background: var(--brown);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      z-index: 1000;
+      transition: opacity .8s ease, visibility .8s ease;
+    }
+    #envelope-screen.hidden { opacity: 0; visibility: hidden; }
+
+    .env-wrap {
+      position: relative;
+      width: min(340px, 90vw);
+      cursor: pointer;
+      animation: floatEnv 3s ease-in-out infinite;
+    }
+    @keyframes floatEnv {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(-12px); }
+    }
+
+    .env-body {
+      width: 100%; aspect-ratio: 3/2;
+      background: var(--cream2);
+      border-radius: 4px;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(0,0,0,.4);
+      overflow: hidden;
+    }
+    .env-flap {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 50%;
+      background: var(--cream);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transform: rotateX(0deg);
+      transition: transform .6s ease;
+    }
+    .env-wrap:hover .env-flap { transform: rotateX(-160deg); }
+    .env-seal {
+      position: absolute;
+      top: 50%; left: 50%; transform: translate(-50%,-50%);
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      background: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem; color: var(--cream);
+      box-shadow: 0 0 0 3px var(--brown), 0 0 0 5px var(--gold);
+      z-index: 2;
+    }
+
+    .env-label {
+      text-align: center;
+      margin-top: 28px;
+      color: var(--cream2);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      opacity: .8;
+    }
+    .env-hint {
+      margin-top: 10px;
+      font-size: .75rem;
+      letter-spacing: .15em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    /* ─── PETALS ─── */
+    .petal {
+      position: fixed;
+      top: -40px;
+      width: 18px; height: 22px;
+      border-radius: 50% 0 50% 0;
+      opacity: .7;
+      pointer-events: none;
+      z-index: 998;
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      0%   { transform: translateY(0) rotate(0deg) translateX(0); opacity:.7; }
+      100% { transform: translateY(110vh) rotate(540deg) translateX(40px); opacity:0; }
+    }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 80px 20px;
+      text-align: center;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse at 20% 30%, rgba(74,103,65,.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 70%, rgba(201,123,132,.12) 0%, transparent 60%),
+        linear-gradient(160deg, #f7f0e6 0%, #ede4d4 100%);
+    }
+
+    /* SVG leaf decorations */
+    .leaf-deco {
+      position: absolute;
+      opacity: .18;
+      pointer-events: none;
+    }
+
+    .bismillah {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(.9rem,2.5vw,1.1rem);
+      color: var(--green);
+      letter-spacing: .1em;
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeUp .8s ease forwards .4s;
+    }
+    .couple-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 300;
+      font-size: clamp(3rem,10vw,6.5rem);
+      line-height: 1;
+      color: var(--brown);
+      letter-spacing: -.01em;
+      opacity: 0;
+      animation: fadeUp .9s ease forwards .7s;
+    }
+    .couple-names em {
+      font-style: italic;
+      color: var(--rose);
+    }
+    .ampersand {
+      display: block;
+      font-size: clamp(2rem,7vw,4rem);
+      color: var(--gold);
+      margin: .1em 0;
+      font-style: normal;
+    }
+    .tagline {
+      margin-top: 24px;
+      font-size: clamp(.8rem,2vw,.95rem);
+      letter-spacing: .3em;
+      text-transform: uppercase;
+      color: var(--green);
+      opacity: 0;
+      animation: fadeUp .8s ease forwards 1s;
+    }
+    .divider {
+      display: flex; align-items: center; gap: 16px;
+      margin: 36px auto;
+      opacity: 0;
+      animation: fadeUp .8s ease forwards 1.2s;
+    }
+    .divider-line { flex: 1; max-width: 80px; height: 1px; background: var(--gold); }
+    .divider-icon { color: var(--gold); font-size: 1.2rem; }
+
+    @keyframes fadeUp {
+      from { opacity:0; transform: translateY(24px); }
+      to   { opacity:1; transform: translateY(0); }
+    }
+
+    /* ─── SECTIONS ─── */
+    section {
+      padding: 80px 20px;
+      max-width: 720px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .section-label {
+      font-size: .7rem;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+    h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 400;
+      font-size: clamp(1.8rem,5vw,2.8rem);
+      color: var(--brown);
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    h2 em { font-style: italic; color: var(--rose); }
+
+    p.body-text {
+      font-size: clamp(.85rem,2vw,.95rem);
+      line-height: 1.9;
+      color: var(--text);
+      opacity: .8;
+      max-width: 540px;
+      margin: 0 auto;
+    }
+
+    /* ─── COUPLE CARD ─── */
+    .couple-cards {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 24px;
+      align-items: center;
+      margin: 48px 0;
+    }
+    .person-card {
+      background: var(--light);
+      border: 1px solid rgba(184,151,90,.25);
+      border-radius: 16px;
+      padding: 36px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .person-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--rose2));
+    }
+    .person-icon {
+      font-size: 2rem;
+      margin-bottom: 12px;
+    }
+    .person-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: var(--brown);
+      font-weight: 600;
+    }
+    .person-parents {
+      font-size: .78rem;
+      color: var(--text);
+      opacity: .6;
+      margin-top: 8px;
+      line-height: 1.7;
+    }
+    .and-circle {
+      width: 56px; height: 56px;
+      border-radius: 50%;
+      background: var(--gold);
+      color: var(--cream);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-style: italic;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(184,151,90,.35);
+      flex-shrink: 0;
+    }
+
+    /* ─── EVENT CARD ─── */
+    .event-block {
+      background: var(--green);
+      border-radius: 20px;
+      padding: 52px 40px;
+      position: relative;
+      overflow: hidden;
+      margin: 40px 0;
+    }
+    .event-block::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.05);
+    }
+    .event-block::after {
+      content: '';
+      position: absolute;
+      bottom: -40px; left: -40px;
+      width: 150px; height: 150px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.05);
+    }
+    .event-block h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1rem;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      color: var(--rose2);
+      margin-bottom: 24px;
+    }
+    .event-date-big {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem,8vw,5rem);
+      font-weight: 300;
+      color: var(--cream);
+      line-height: 1;
+    }
+    .event-month-year {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      color: var(--gold);
+      letter-spacing: .15em;
+      margin-top: 8px;
+    }
+    .event-time {
+      margin-top: 24px;
+      font-size: .85rem;
+      letter-spacing: .2em;
+      color: rgba(249,245,239,.7);
+      text-transform: uppercase;
+    }
+    .event-place {
+      margin-top: 12px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      color: var(--cream2);
+      line-height: 1.6;
+    }
+    .map-btn {
+      display: inline-flex;
+      align-items: center; gap: 8px;
+      margin-top: 28px;
+      padding: 12px 28px;
+      border: 1px solid var(--gold);
+      border-radius: 100px;
+      color: var(--gold);
+      font-size: .78rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: background .3s, color .3s;
+    }
+    .map-btn:hover { background: var(--gold); color: var(--green); }
+
+    /* ─── COUNTDOWN ─── */
+    .countdown-wrap {
+      display: flex;
+      justify-content: center; gap: clamp(12px,3vw,32px);
+      margin: 40px 0;
+    }
+    .cd-box {
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .cd-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.5rem,7vw,4rem);
+      font-weight: 300;
+      color: var(--brown);
+      line-height: 1;
+      min-width: 2ch;
+      text-align: center;
+    }
+    .cd-label {
+      font-size: .65rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 6px;
+    }
+    .cd-sep {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.5rem;
+      color: var(--gold);
+      opacity: .5;
+      align-self: flex-start;
+      padding-top: 4px;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:.5} 50%{opacity:0} }
+
+    /* ─── GALLERY MOOD ─── */
+    .mood-grid {
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 10px;
+      margin: 40px 0;
+    }
+    .mood-tile {
+      aspect-ratio: 1;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .mood-tile::after {
+      content: '';
+      position: absolute; inset: 0;
+      opacity: .08;
+    }
+
+    /* ─── QUOTE ─── */
+    .quote-block {
+      padding: 60px 40px;
+      background: linear-gradient(135deg, var(--cream2) 0%, var(--light) 100%);
+      border-radius: 20px;
+      position: relative;
+      margin: 20px 0;
+    }
+    .quote-mark {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 8rem;
+      line-height: 0;
+      color: var(--gold);
+      opacity: .15;
+      position: absolute;
+      top: 50px; left: 30px;
+      font-style: italic;
+    }
+    .quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(1.1rem,3vw,1.5rem);
+      line-height: 1.7;
+      color: var(--brown);
+      position: relative;
+    }
+    .quote-source {
+      margin-top: 16px;
+      font-size: .75rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ─── RSVP ─── */
+    .rsvp-form {
+      display: flex; flex-direction: column; gap: 16px;
+      margin: 32px 0;
+    }
+    .rsvp-form input,
+    .rsvp-form textarea {
+      width: 100%;
+      padding: 14px 18px;
+      border: 1px solid rgba(107,76,53,.25);
+      border-radius: 10px;
+      background: var(--light);
+      font-family: 'Jost', sans-serif;
+      font-size: .9rem;
+      color: var(--text);
+      outline: none;
+      transition: border-color .3s;
+      resize: vertical;
+    }
+    .rsvp-form input:focus,
+    .rsvp-form textarea:focus { border-color: var(--gold); }
+    .rsvp-form textarea { min-height: 90px; }
+    .rsvp-radio-group { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .rsvp-radio {
+      padding: 10px 22px;
+      border: 1px solid rgba(107,76,53,.25);
+      border-radius: 100px;
+      cursor: pointer;
+      font-size: .82rem;
+      letter-spacing: .1em;
+      transition: background .3s, border-color .3s, color .3s;
+      background: var(--light);
+      color: var(--text);
+    }
+    .rsvp-radio.selected {
+      background: var(--green);
+      border-color: var(--green);
+      color: var(--cream);
+    }
+    .rsvp-btn {
+      padding: 16px 40px;
+      background: var(--gold);
+      color: var(--cream);
+      border: none;
+      border-radius: 100px;
+      font-family: 'Jost', sans-serif;
+      font-size: .85rem;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .3s, transform .2s;
+    }
+    .rsvp-btn:hover { background: var(--brown); transform: translateY(-2px); }
+    .rsvp-success {
+      display: none;
+      text-align: center;
+      padding: 32px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: var(--green);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      text-align: center;
+      padding: 60px 20px 40px;
+      background: var(--brown);
+      color: var(--cream2);
+    }
+    .footer-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem,6vw,3rem);
+      font-weight: 300;
+      font-style: italic;
+      margin-bottom: 16px;
+    }
+    .footer-msg {
+      font-size: .78rem;
+      letter-spacing: .2em;
+      opacity: .55;
+      text-transform: uppercase;
+    }
+    .footer-leaf {
+      font-size: 1.5rem;
+      margin: 20px 0 8px;
+      opacity: .4;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 600px) {
+      .couple-cards { grid-template-columns: 1fr; }
+      .and-circle { margin: 0 auto; }
+      .event-block { padding: 36px 24px; }
+      .quote-block { padding: 40px 24px; }
+      .mood-grid { grid-template-columns: repeat(3,1fr); gap: 6px; }
+    }
+
+    /* ─── SCROLL REVEAL ─── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── PROGRESS BAR ─── */
+    #progress {
+      position: fixed; top: 0; left: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--rose));
+      z-index: 9998;
+      transition: width .1s linear;
+    }
+  </style>
 </head>
-
 <body>
 
-<nav class="fixed w-full z-50 bg-black/80 backdrop-blur border-b border-red-900">
-<div class="container mx-auto px-6 py-4 flex justify-between">
-<div class="text-xl font-bold text-red-600">Cesare Borgia</div>
-<a href="https://en.wikipedia.org/wiki/Cesare_Borgia" target="_blank"
-class="bg-red-700 px-4 py-2 rounded text-sm">Wikipedia</a>
-</div>
-</nav>
+<!-- Progress Bar -->
+<div id="progress"></div>
 
-<!-- HERO -->
-<section class="min-h-screen flex items-center pt-24">
-<div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-
-    <!-- Foto Profil -->
-    <div class="reveal">
-        <img src="https://media.gettyimages.com/id/1939586597/vector/portrait-of-cesare-borgia-an-italian-cardinal-and-condottiero-mercenary-leader-renaissance.jpg?s=612x612&w=gi&k=20&c=093HYLiqigxCGi1znSnzmYjFfZ4T9Lkc2Kiwp7R3_g0="
-             alt="Portrait of Cesare Borgia"
-             class="w-full max-w-sm mx-auto rounded-xl border border-red-800 shadow-lg">
+<!-- ══════════════ ENVELOPE SCREEN ══════════════ -->
+<div id="envelope-screen">
+  <div class="env-wrap" onclick="openInvitation()">
+    <div class="env-body">
+      <div class="env-flap"></div>
+      <div class="env-seal">A&R</div>
     </div>
-
-    <!-- Teks Hero -->
-    <div class="text-center md:text-left reveal">
-        <h1 class="text-5xl font-bold mb-4 text-red-600">
-            Cesare Borgia
-        </h1>
-        <p class="text-slate-300 text-lg mb-4">
-            Duke of Romagna. Seorang tokoh Realpolitik Renaissance yang menjadi model studi dalam karya Niccolò Machiavelli.
-        </p>
-
-        <!-- Icon Sword -->
-        <svg class="mx-auto md:mx-0 sword mb-6" width="60" height="180" viewBox="0 0 100 300">
-            <rect x="45" y="20" width="10" height="180" fill="#ccc"/>
-            <rect x="30" y="200" width="40" height="15" fill="#999"/>
-            <rect x="42" y="215" width="16" height="60" fill="#7f1d1d"/>
-        </svg>
-
-        <div class="space-x-4">
-            <a href="https://en.wikipedia.org/wiki/Cesare_Borgia" target="_blank"
-               class="underline text-red-400">Wikipedia</a>
-            <a href="https://www.britannica.com/biography/Cesare-Borgia" target="_blank"
-               class="underline text-red-400">Britannica</a>
-        </div>
-    </div>
-
+    <p class="env-label">Undangan Pernikahan</p>
+    <p class="env-hint">✦ Klik untuk membuka ✦</p>
+  </div>
 </div>
+
+<!-- ══════════════ PETALS ══════════════ -->
+<div id="petals-container"></div>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+
+  <!-- SVG leaf top-left -->
+  <svg class="leaf-deco" style="top:-40px;left:-60px;width:340px" viewBox="0 0 300 300" fill="none">
+    <path d="M60 250 Q10 150 150 20 Q250 80 200 200 Q160 280 60 250Z" fill="#4a6741"/>
+    <path d="M150 20 Q200 120 130 220" stroke="#6b4c35" stroke-width="1.5" fill="none" opacity=".4"/>
+  </svg>
+  <!-- SVG leaf bottom-right -->
+  <svg class="leaf-deco" style="bottom:-40px;right:-60px;width:300px;transform:rotate(180deg)" viewBox="0 0 300 300" fill="none">
+    <path d="M60 250 Q10 150 150 20 Q250 80 200 200 Q160 280 60 250Z" fill="#c97b84"/>
+    <path d="M150 20 Q200 120 130 220" stroke="#b8975a" stroke-width="1.5" fill="none" opacity=".4"/>
+  </svg>
+
+  <p class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</p>
+  <div class="couple-names">
+    <em>Aditya</em>
+    <span class="ampersand">&</span>
+    <em>Rika</em>
+  </div>
+  <p class="tagline">Bersatu dalam ikatan suci pernikahan</p>
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-icon">🌿</span>
+    <div class="divider-line"></div>
+  </div>
+  <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.05rem;color:var(--green);opacity:0;animation:fadeUp .8s ease forwards 1.4s">
+    13 Juni 2026 · Mojokerto
+  </p>
 </section>
 
-<!-- Biography SECTION -->
-<section class="py-20 bg-black/70 border-t border-red-900">
-<div class="container mx-auto px-6">
-    <div class="text-center mb-16 reveal">
-        <h2 class="text-4xl font-bold text-red-600 mb-4">
-            Biografi Singkat Cesare Borgia
-        </h2>
-        <p class="text-slate-400 max-w-3xl mx-auto">
-            Cesare Borgia (1475–1507) adalah seorang tokoh politik dan militer Italia pada masa Renaissance. Sebagai putra Paus Alexander VI, ia memanfaatkan hubungan keluarganya untuk memperluas kekuasaan dan pengaruhnya di Italia tengah. Awalnya ditahbiskan sebagai kardinal, Cesare kemudian melepaskan jabatan keagamaannya untuk menjadi seorang condottiero (pemimpin tentara bayaran) dan penguasa wilayah Romagna. Ia dikenal karena kecerdasan strategisnya, reformasi administratif yang efektif, serta pendekatan brutal terhadap penaklukan dan pemerintahan. Cesare sering dianggap sebagai inspirasi bagi Niccolò Machiavelli dalam karya terkenalnya, "The Prince", yang menyoroti realpolitik dan pragmatisme dalam pemerintahan. Meskipun kariernya berakhir tragis setelah kematian ayahnya dan kehilangan dukungan politik, warisannya sebagai tokoh kontroversial dan visioner tetap dikenang dalam sejarah Italia.
-        </p>
-    </div>
-</div>
+<!-- ══════════════ OPENING QUOTE ══════════════ -->
+<section class="reveal">
+  <div class="quote-block">
+    <span class="quote-mark">"</span>
+    <p class="quote-text">
+      Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu
+      pasangan hidup dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram
+      kepadanya, dan dijadikan-Nya di antaramu rasa kasih dan sayang.
+    </p>
+    <p class="quote-source">QS. Ar-Rum : 21</p>
+  </div>
 </section>
 
-<!-- War Timeline Section -->
-<section class="py-20">
-<div class="container mx-auto px-6 reveal">
-    <h2 class="text-4xl font-bold text-red-600 text-center mb-12">
-        Garis Waktu Penaklukan Romagna oleh Cesare Borgia (1499–1502)
-    </h2>
-    <div class="relative max-w-4xl mx-auto">
-        <!-- Vertical Line -->
-        <div class="absolute left-1/2 transform -translate-x-1/2 h-full border-l-2 border-red-600"></div>
-
-        <!-- Timeline Items -->
-        <div class="space-y-12">
-            <!-- Item 1 -->
-            <div class="flex items-start">
-                <div class="w-1/2 pr-8 text-right">
-                    <h3 class="text-2xl font-bold text-red-600">1499: Penaklukan Imola</h3>
-                    <p class="text-slate-400">
-                        Dengan dukungan militer dari Prancis, Cesare berhasil merebut Imola tanpa perlawanan besar. Ia mempertahankan struktur administratif lokal untuk memastikan stabilitas.
-                    </p>
-                </div>
-                <div class="w-8 h-8 bg-red-600 rounded-full border-4 border-black mt-1"></div>
-            </div>
-            <!-- Item 2 -->
-            <div class="flex items-start">
-                <div class="w-1/2 pl-8">
-                    <div class="w-8 h-8 bg-red-600 rounded-full border-4 border-black mt-1"></div>
-                </div>
-                <div class="w-1/2 pl-8">
-                    <h3 class="text-2xl font-bold text-red-600">1500: Pengepungan Forlì</h3>
-                    <p class="text-slate-400">
-                        Forlì, yang dipertahankan oleh Caterina Sforza, menjadi target utama. Setelah pengepungan yang intens, kota tersebut jatuh ke tangan Borgia, memperkuat reputasinya sebagai pemimpin militer yang tangguh.
-                    </p>
-                </div>
-            </div>
-            <!-- Item 3 -->
-            <div class="flex items-start">
-                <div class="w-1/2 pr-8 text-right">
-                    <h3 class="text-2xl font-bold text-red-600">1502: Penaklukan Cesena</h3>
-                    <p class="text-slate-400">
-                        Setelah menstabilkan wilayah yang telah ditaklukkan, Cesare menunjuk Remirro de Orco untuk menegakkan hukum dengan tangan besi di Cesena. Eksekusi publik Remirro kemudian digunakan untuk membangun citra keadilan tegas.
-                    </p>
-                </div>
-                <div class="w-8 h-8 bg-red-600 rounded-full border-4 border-black mt-1"></div>
-            </div>
-        </div>
+<!-- ══════════════ COUPLE ══════════════ -->
+<section class="reveal">
+  <p class="section-label">Mempelai</p>
+  <h2>Dua Hati, <em>Satu Jiwa</em></h2>
+  <div class="couple-cards">
+    <div class="person-card">
+      <div class="person-icon">🤵</div>
+      <div class="person-name">Aditya Romadhoni</div>
+      <p class="person-parents">Putra dari<br>Bapak & Ibu Romadhoni</p>
     </div>
-</div>
+    <div class="and-circle">&</div>
+    <div class="person-card">
+      <div class="person-icon">👰</div>
+      <div class="person-name">Rika Wulandari</div>
+      <p class="person-parents">Putri dari<br>Bapak & Ibu Wulandari</p>
+    </div>
+  </div>
+  <p class="body-text">
+    Dengan penuh rasa syukur dan kebahagiaan, kami mengundang Bapak/Ibu/Saudara/i
+    untuk hadir dan memberikan doa restu dalam momen terindah kehidupan kami.
+  </p>
 </section>
 
-<!-- FAMILY TREE SECTION -->
-<section class="py-20 bg-black/70 border-t border-red-900">
-<div class="container mx-auto px-6">
-    <div class="text-center mb-16 reveal">
-        <h2 class="text-4xl font-bold text-red-600 mb-4">
-            Silsilah Keluarga Borgia
-        </h2>
-        <p class="text-slate-400">
-            Dinasti yang mendominasi politik Renaissance Italia
-        </p>
-    </div>    
+<!-- ══════════════ EVENT ══════════════ -->
+<section class="reveal">
+  <p class="section-label">Hari Istimewa</p>
+  <h2>Waktu & <em>Tempat</em></h2>
 
-    <!-- Family Tree Container -->
-    <div class="family-tree max-w-6xl mx-auto relative reveal">
-        
-        <!-- GENERATION 1: Parents -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
-            <!-- Father: Rodrigo Borgia (Pope Alexander VI) -->
-            <div class="family-node mx-auto">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Pope_Alexander_VI.jpg/800px-Pope_Alexander_VI.jpg"
-                     alt="Rodrigo Borgia (Pope Alexander VI)"
-                     onerror="this.src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl2M9FtOYvFaMZSjpcVrf8Ch8-39Bqn0BdXmZjcKtnwbqO-mOabF1tDzx8PyHR_XnwPRzbXYHBiLFoZhMZKMs9x1DOUPH_6tptUOI_a7m3KCaLG0uJTAD3wN6O1QkOw9BU&s=10&ec=121528423'">
-                <h3>Rodrigo Borgia</h3>
-                <p class="text-sm">Paus Alexander VI (1431-1503)</p>
-                <p class="text-xs mt-2 text-slate-500">
-                    Ayah Cesare, Paus dari 1492-1503. Politisi ulung yang memanfaatkan kepausan untuk kekuasaan keluarga.
-                </p>
-                <a href="https://en.wikipedia.org/wiki/Pope_Alexander_VI" target="_blank" class="text-red-400 text-xs underline mt-2 block">
-                    Wikipedia
-                </a>
-            </div>
-
-            <!-- Mother: Vannozza dei Cattanei -->
-            <div class="family-node mx-auto">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwSANEFSzJ9YHt7QFfQ6XrzkA0l0nag8Z7FQQsp0Vy0T14Qygk_SSdxh3MrTWwQ-4EQ-hEtV1oUojz58bb-YzLvoRl36khIJ05mGqCKKoxcJWwUMO5WUedwcZhGOJH7qj0&s=10&ec=121528423"
-                     alt="Vannozza dei Cattanei"
-                     onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Vannozza_Cattanei.jpg/800px-Vannozza_Cattanei.jpg'">
-                <h3>Vannozza dei Cattanei</h3>
-                <p class="text-sm">Gundik Rodrigo Borgia (1442-1518)</p>
-                <p class="text-xs mt-2 text-slate-500">
-                    Ibu Cesare dan saudara-saudaranya. Wanita berpengaruh yang menjadi favorit Rodrigo selama bertahun-tahun.
-                </p>
-                <a href="https://en.wikipedia.org/wiki/Vannozza_dei_Cattanei" target="_blank" class="text-red-400 text-xs underline mt-2 block">
-                    Wikipedia
-                </a>
-            </div>
-        </div>
-
-        <!-- Connection Line to Children -->
-        <div class="family-tree-line" style="top: 180px; left: 25%; right: 25%; height: 40px;"></div>
-
-        <!-- GENERATION 2: Children -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <!-- Giovanni Borgia -->
-            <div class="family-node mx-auto">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/b/bc/Juan_de_Borja_Llan%C3%A7ol_de_Roman%C3%AD%2C_el_mayor.jpg"
-                     alt="Giovanni Borgia"
-                     onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Giovanni_Borgia.jpg/800px-Giovanni_Borgia.jpg'">
-                <h3>Giovanni Borgia</h3>
-                <p class="text-sm">Duke of Gandia (1474-1497)</p>
-                <p class="text-xs mt-2 text-slate-500">
-                    Kakak Cesare. Dibunuh secara misterius di Roma, kematian yang memicu spekulasi besar.
-                </p>
-                <a href="https://en.wikipedia.org/wiki/Giovanni_Borgia,_2nd_Duke_of_Gandia" target="_blank" class="text-red-400 text-xs underline mt-2 block">
-                    Wikipedia
-                </a>
-            </div>
-
-            <!-- Cesare Borgia -->
-            <div class="family-node mx-auto border-4 border-red-600 shadow-lg shadow-red-500/30">
-                <img src="https://media.gettyimages.com/id/1939586597/vector/portrait-of-cesare-borgia-an-italian-cardinal-and-condottiero-mercenary-leader-renaissance.jpg?s=612x612&w=gi&k=20&c=093HYLiqigxCGi1znSnzmYjFfZ4T9Lkc2Kiwp7R3_g0="
-                     alt="Cesare Borgia">
-                <h3 class="text-2xl font-bold">Cesare Borgia</h3>
-                <p class="text-sm font-semibold">Duke of Romagna (1475-1507)</p>
-                <p class="text-xs mt-2 text-slate-500">
-                    Tokoh utama. Mantan Kardinal yang menjadi condottiero. Model Machiavelli dalam "The Prince".
-                </p>
-                <a href="https://en.wikipedia.org/wiki/Cesare_Borgia" target="_blank" class="text-red-400 text-xs underline mt-2 block">
-                    Wikipedia
-                </a>
-            </div>
-
-            <!-- Lucrezia Borgia -->
-            <div class="family-node mx-auto">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRlCIdyNGN17fP8brrxt4qTdIyf_u3YahMipBaPplUm7xFJeLeQNVMnIPWKsc5cK2TcfPMPSdvfTBdIo1-f_jFEbbLj4DOv4d0A-3DWffjrVPr1yNeMh_SjmBbDhZwH71g&s=10&ec=121528423"
-                     alt="Lucrezia Borgia"
-                     onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Lucrezia_Borgia.jpg/800px-Lucrezia_Borgia.jpg'">
-                <h3>Lucrezia Borgia</h3>
-                <p class="text-sm">Duchess of Ferrara (1480-1519)</p>
-                <p class="text-xs mt-2 text-slate-500">
-                    Saudara perempuan Cesare. Politikus ulung dan patron seni. Reputasinya sebagai "venomous" sering dibesar-besarkan.
-                </p>
-                <a href="https://en.wikipedia.org/wiki/Lucrezia_Borgia" target="_blank" class="text-red-400 text-xs underline mt-2 block">
-                    Wikipedia
-                </a>
-            </div>
-
-            <!-- Jofré Borgia -->
-            <div class="family-node mx-auto">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQPZisJHp8YGGkYLsbQdD9AaR5LiPCQZbY5Tw&s"
-                     alt="Jofré Borgia"
-                     onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Jofre_Borgia.jpg/800px-Jofre_Borgia.jpg'">
-                <h3>Jofré Borgia</h3>
-                <p class="text-sm">Prince of Squillace (1482-1517)</p>
-                <p class="text-xs mt-2 text-slate-500">
-                    Adik bungsu. Menikah dengan putri Napoli untuk aliansi politik. Kurang aktif dalam politik keluarga.
-                </p>
-                <a href="https://en.wikipedia.org/wiki/Jofr%C3%A9_Borgia" target="_blank" class="text-red-400 text-xs underline mt-2 block">
-                    Wikipedia
-                </a>
-            </div>
-           
-        </div>       
+  <div class="event-block">
+    <h3>✦ Akad & Resepsi Pernikahan ✦</h3>
+    <div class="event-date-big">13</div>
+    <div class="event-month-year">Juni · 2026</div>
+    <div class="event-time">Sabtu · Pukul 08.00 WIB s/d Selesai</div>
+    <div class="event-place">
+      Gang Condong, Desa Jetis<br>
+      Kecamatan Jetis, Mojokerto<br>
+      Jawa Timur
     </div>
-</div>
+    <a class="map-btn"
+       href="https://maps.google.com/?q=Desa+Jetis+Kecamatan+Jetis+Mojokerto"
+       target="_blank" rel="noopener">
+      📍 Buka di Google Maps
+    </a>
+  </div>
 </section>
 
-<!-- MAP -->
-<section class="py-20 bg-black/70">
-<div class="container mx-auto px-6 text-center reveal">
-<h2 class="text-4xl font-bold text-red-600 mb-10">
-Ekspansi Wilayah Romagna (1499–1502)
-</h2>
-
-<div id="map" class="mx-auto max-w-4xl"></div>
-
-<p class="text-slate-400 mt-6 text-sm">
-Klik marker untuk membaca cerita penaklukan.
-</p>
-</div>
+<!-- ══════════════ COUNTDOWN ══════════════ -->
+<section class="reveal">
+  <p class="section-label">Menghitung Hari</p>
+  <h2>Tidak Sabar <em>Menunggu</em></h2>
+  <div class="countdown-wrap">
+    <div class="cd-box">
+      <div class="cd-num" id="cd-days">00</div>
+      <div class="cd-label">Hari</div>
+    </div>
+    <div class="cd-sep">:</div>
+    <div class="cd-box">
+      <div class="cd-num" id="cd-hours">00</div>
+      <div class="cd-label">Jam</div>
+    </div>
+    <div class="cd-sep">:</div>
+    <div class="cd-box">
+      <div class="cd-num" id="cd-mins">00</div>
+      <div class="cd-label">Menit</div>
+    </div>
+    <div class="cd-sep">:</div>
+    <div class="cd-box">
+      <div class="cd-num" id="cd-secs">00</div>
+      <div class="cd-label">Detik</div>
+    </div>
+  </div>
+  <p class="body-text">Kehadiran Anda adalah hadiah terindah untuk kami.</p>
 </section>
 
-<!-- SWOT -->
-<section class="py-20">
-<div class="container mx-auto px-6 reveal">
-<h2 class="text-4xl font-bold text-red-600 text-center mb-12">
-SWOT Analysis (Modern Interpretation)
-</h2>
-
-<div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-
-<!-- Strength -->
-<div class="bg-black p-6 border border-green-600 rounded-xl">
-<h3 class="text-green-500 font-bold mb-4">Strength</h3>
-<ul class="text-slate-400 text-sm space-y-2">
-<li>• Konsolidasi cepat wilayah terfragmentasi</li>
-<li>• Reformasi administratif efektif</li>
-<li>• Adaptasi geopolitik Prancis–Spanyol</li>
-</ul>
-</div>
-
-<!-- Weakness -->
-<div class="bg-black p-6 border border-red-600 rounded-xl">
-<h3 class="text-red-500 font-bold mb-4">Weakness</h3>
-<ul class="text-slate-400 text-sm space-y-2">
-<li>• Ketergantungan pada Paus Alexander VI</li>
-<li>• Legitimasi lemah</li>
-<li>• Reputasi brutal</li>
-</ul>
-</div>
-
-<!-- Opportunity -->
-<div class="bg-black p-6 border border-blue-600 rounded-xl">
-<h3 class="text-blue-500 font-bold mb-4">Opportunity</h3>
-<ul class="text-slate-400 text-sm space-y-2">
-<li>• Fragmentasi Italia abad ke-15</li>
-<li>• Konflik kekuatan asing</li>
-<li>• Reformasi pemerintahan lokal</li>
-</ul>
-</div>
-
-<!-- Threat -->
-<div class="bg-black p-6 border border-yellow-600 rounded-xl">
-<h3 class="text-yellow-400 font-bold mb-4">Threat</h3>
-<ul class="text-slate-400 text-sm space-y-2">
-<li>• Pergantian Paus</li>
-<li>• Aliansi Spanyol</li>
-<li>• Resistensi lokal</li>
-</ul>
-</div>
-
-</div>
-</div>
+<!-- ══════════════ MOOD / VIBE ══════════════ -->
+<section class="reveal">
+  <p class="section-label">Suasana</p>
+  <h2>Nuansa <em>Alami & Romantis</em></h2>
+  <div class="mood-grid">
+    <div class="mood-tile" style="background:linear-gradient(135deg,#e8f5e4,#c8e6c0)">🌿</div>
+    <div class="mood-tile" style="background:linear-gradient(135deg,#fce4ec,#f8bbd0)">🌸</div>
+    <div class="mood-tile" style="background:linear-gradient(135deg,#fff8e1,#ffe082)">🕯️</div>
+    <div class="mood-tile" style="background:linear-gradient(135deg,#f3e5f5,#e1bee7)">💐</div>
+    <div class="mood-tile" style="background:linear-gradient(135deg,#e0f2f1,#b2dfdb)">🍃</div>
+    <div class="mood-tile" style="background:linear-gradient(135deg,#fbe9e7,#ffccbc)">🌹</div>
+  </div>
+  <p class="body-text">
+    Acara kami dirancang dengan sentuhan alam yang hangat — bunga segar, dedaunan hijau,
+    dan cahaya lilin yang menciptakan suasana penuh kasih dan kebersamaan.
+  </p>
 </section>
 
-<!-- YOUTUBE VIDEOS SECTION -->
-<section class="py-20 bg-black/70 border-t border-red-900">
-<div class="container mx-auto px-6">
-    <div class="text-center mb-16 reveal">
-        <h2 class="text-4xl font-bold text-red-600 mb-4">
-            <i class="fa-brands fa-youtube mr-3"></i>
-            Dokumenter & Analisis
-        </h2>
-        <p class="text-slate-400">
-            Video dokumenter dan analisis mendalam tentang Cesare Borgia
-        </p>
+<!-- ══════════════ PROTOKOL ══════════════ -->
+<section class="reveal">
+  <p class="section-label">Informasi</p>
+  <h2>Protokol <em>Kesehatan</em></h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:16px;margin:32px 0">
+    <div style="padding:24px 16px;background:var(--light);border-radius:14px;border:1px solid rgba(184,151,90,.2)">
+      <div style="font-size:2rem;margin-bottom:8px">😷</div>
+      <div style="font-size:.78rem;letter-spacing:.1em;color:var(--brown)">Gunakan Masker</div>
     </div>
-
-    <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-        
-        <!-- Video 1: Cesare Borgia Documentary -->
-        <div class="reveal">
-            <div class="bg-black/50 rounded-xl overflow-hidden border border-red-900/50 hover:border-red-600 transition-all duration-300">
-                <div class="aspect-video relative group cursor-pointer">
-                    <iframe 
-                        src="https://www.youtube.com/embed/qsUgOorF1oA"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen
-                        class="w-full h-full"
-                        title="Cesare Borgia Documentary">
-                    </iframe>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent 
-                    opacity-0 group-hover:opacity-100 transition-opacity duration-300 
-                    pointer-events-none">
-
-                        <div class="absolute bottom-4 left-4">
-                            <h3 class="text-xl font-bold text-white mb-2">Cesare Borgia: The Ruthless Prince</h3>
-                            <p class="text-slate-300 text-sm">History Channel Documentary</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-red-600 mb-2">Cesare Borgia: The Ruthless Prince</h3>
-                    <p class="text-slate-400 text-sm mb-3">
-                        Dokumenter komprehensif tentang kehidupan dan karier Cesare Borgia, mengeksplorasi ambisinya, strategi militer, dan pengaruhnya terhadap politik Renaissance.
-                    </p>
-                    <div class="flex items-center justify-between text-xs text-slate-500">
-                        <span><i class="fa-solid fa-clock mr-1"></i> 45 menit</span>
-                        <span><i class="fa-solid fa-eye mr-1"></i> History Channel</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Video 2: Machiavelli's The Prince -->
-        <div class="reveal" style="transition-delay: 100ms;">
-            <div class="bg-black/50 rounded-xl overflow-hidden border border-red-900/50 hover:border-red-600 transition-all duration-300">
-                <div class="aspect-video relative group cursor-pointer">
-                    <iframe 
-                        src="https://www.youtube.com/embed/EwWg2MDvHDI  " 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen
-                        class="w-full h-full"
-                        title="Machiavelli's The Prince">
-                    </iframe>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent 
-                    opacity-0 group-hover:opacity-100 transition-opacity duration-300 
-                    pointer-events-none">
-                        <div class="absolute bottom-4 left-4">
-                            <h3 class="text-xl font-bold text-white mb-2">Machiavelli's The Prince Explained</h3>
-                            <p class="text-slate-300 text-sm">Philosophy & Political Theory</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-red-600 mb-2">Machiavelli's The Prince Explained</h3>
-                    <p class="text-slate-400 text-sm mb-3">
-                        Analisis mendalam tentang karya Niccolò Machiavelli yang terinspirasi oleh Cesare Borgia, menjelaskan konsep realpolitik dan kepemimpinan yang efektif.
-                    </p>
-                    <div class="flex items-center justify-between text-xs text-slate-500">
-                        <span><i class="fa-solid fa-clock mr-1"></i> 28 menit</span>
-                        <span><i class="fa-solid fa-book mr-1"></i> Philosophy Tube</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Video 3: The Borgias Family -->
-        <div class="reveal" style="transition-delay: 200ms;">
-            <div class="bg-black/50 rounded-xl overflow-hidden border border-red-900/50 hover:border-red-600 transition-all duration-300">
-                <div class="aspect-video relative group cursor-pointer">
-                    <iframe 
-                        src="https://www.youtube.com/embed/JF8kMy1pvnI" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen
-                        class="w-full h-full"
-                        title="The Borgia Family">
-                    </iframe>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent 
-                    opacity-0 group-hover:opacity-100 transition-opacity duration-300 
-                    pointer-events-none">
-                        <div class="absolute bottom-4 left-4">
-                            <h3 class="text-xl font-bold text-white mb-2">The Borgia Family: Power & Corruption</h3>
-                            <p class="text-slate-300 text-sm">Renaissance Dynasty</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-red-600 mb-2">The Borgia Family: Power & Corruption</h3>
-                    <p class="text-slate-400 text-sm mb-3">
-                        Eksplorasi dinasti Borgia secara keseluruhan, termasuk Rodrigo (Paus Alexander VI), Cesare, Lucrezia, dan pengaruh mereka terhadap Vatikan dan politik Italia.
-                    </p>
-                    <div class="flex items-center justify-between text-xs text-slate-500">
-                        <span><i class="fa-solid fa-clock mr-1"></i> 52 menit</span>
-                        <span><i class="fa-solid fa-landmark mr-1"></i> National Geographic</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Video 4: Renaissance Warfare -->
-        <div class="reveal" style="transition-delay: 300ms;">
-            <div class="bg-black/50 rounded-xl overflow-hidden border border-red-900/50 hover:border-red-600 transition-all duration-300">
-                <div class="aspect-video relative group cursor-pointer">
-                    <iframe 
-                        src="https://www.youtube.com/embed/9LG1_0BFmRM" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen
-                        class="w-full h-full"
-                        title="Renaissance Warfare">
-                    </iframe>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent 
-                    opacity-0 group-hover:opacity-100 transition-opacity duration-300 
-                    pointer-events-none">
-                        <div class="absolute bottom-4 left-4">
-                            <h3 class="text-xl font-bold text-white mb-2">Renaissance Warfare & Cesare's Tactics</h3>
-                            <p class="text-slate-300 text-sm">Military History Analysis</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="p-6">
-                    <h3 class="text-xl font-bold text-red-600 mb-2">Renaissance Warfare & Cesare's Tactics</h3>
-                    <p class="text-slate-400 text-sm mb-3">
-                        Analisis strategi militer Cesare Borgia, termasuk penggunaan artileri, taktik pengepungan, dan reformasi tentara yang membuatnya menjadi condottiero paling ditakuti.
-                    </p>
-                    <div class="flex items-center justify-between text-xs text-slate-500">
-                        <span><i class="fa-solid fa-clock mr-1"></i> 35 menit</span>
-                        <span><i class="fa-solid fa-shield-halved mr-1"></i> Military History Visualized</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+    <div style="padding:24px 16px;background:var(--light);border-radius:14px;border:1px solid rgba(184,151,90,.2)">
+      <div style="font-size:2rem;margin-bottom:8px">🤝</div>
+      <div style="font-size:.78rem;letter-spacing:.1em;color:var(--brown)">Jaga Jarak</div>
     </div>
-
-    <!-- Additional Video Links -->
-    <div class="mt-16 text-center reveal">
-        <h3 class="text-2xl font-bold text-red-600 mb-6">Video Tambahan</h3>
-        <div class="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto">
-            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ  " target="_blank" class="bg-black/50 p-4 rounded-lg border border-red-900/30 hover:border-red-600 transition-all text-left group">
-                <div class="flex items-start gap-3">
-                    <div class="w-12 h-12 bg-red-600/20 rounded flex items-center justify-center flex-shrink-0">
-                        <i class="fa-brands fa-youtube text-red-500"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-red-400 group-hover:text-red-300 transition-colors">Caterina Sforza vs Cesare Borgia</h4>
-                        <p class="text-xs text-slate-500 mt-1">The Battle of Forlì Explained</p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ  " target="_blank" class="bg-black/50 p-4 rounded-lg border border-red-900/30 hover:border-red-600 transition-all text-left group">
-                <div class="flex items-start gap-3">
-                    <div class="w-12 h-12 bg-red-600/20 rounded flex items-center justify-center flex-shrink-0">
-                        <i class="fa-brands fa-youtube text-red-500"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-red-400 group-hover:text-red-300 transition-colors">Lucrezia Borgia: Myth vs Reality</h4>
-                        <p class="text-xs text-slate-500 mt-1">The Truth Behind the Legend</p>
-                    </div>
-                </div>
-            </a>
-
-            <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ  " target="_blank" class="bg-black/50 p-4 rounded-lg border border-red-900/30 hover:border-red-600 transition-all text-left group">
-                <div class="flex items-start gap-3">
-                    <div class="w-12 h-12 bg-red-600/20 rounded flex items-center justify-center flex-shrink-0">
-                        <i class="fa-brands fa-youtube text-red-500"></i>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-red-400 group-hover:text-red-300 transition-colors">The Fall of Cesare Borgia</h4>
-                        <p class="text-xs text-slate-500 mt-1">From Power to Exile</p>
-                    </div>
-                </div>
-            </a>
-        </div>
+    <div style="padding:24px 16px;background:var(--light);border-radius:14px;border:1px solid rgba(184,151,90,.2)">
+      <div style="font-size:2rem;margin-bottom:8px">🧴</div>
+      <div style="font-size:.78rem;letter-spacing:.1em;color:var(--brown)">Cuci Tangan</div>
     </div>
-
-</div>
+    <div style="padding:24px 16px;background:var(--light);border-radius:14px;border:1px solid rgba(184,151,90,.2)">
+      <div style="font-size:2rem;margin-bottom:8px">🕐</div>
+      <div style="font-size:.78rem;letter-spacing:.1em;color:var(--brown)">Tepat Waktu</div>
+    </div>
+  </div>
 </section>
 
-<footer class="bg-black py-8 text-center text-slate-600 text-sm">
-Renaissance Political Case Study | Cesare Borgia
+<!-- ══════════════ UCAPAN / RSVP ══════════════ -->
+<section class="reveal">
+  <p class="section-label">Ucapan & Konfirmasi</p>
+  <h2>Kirim Doa & <em>Ucapan</em></h2>
+  <p class="body-text" style="margin-bottom:12px">
+    Sampaikan ucapan dan doa tulus Anda untuk kebahagiaan kami.
+  </p>
+
+  <div class="rsvp-form" id="rsvp-form">
+    <input type="text" id="rsvp-name" placeholder="Nama Anda" />
+    <textarea id="rsvp-msg" placeholder="Tulis ucapan & doa untuk kami…"></textarea>
+    <div class="rsvp-radio-group">
+      <div class="rsvp-radio selected" data-val="hadir" onclick="selectRsvp(this)">✅ Hadir</div>
+      <div class="rsvp-radio" data-val="mungkin" onclick="selectRsvp(this)">🤔 Mungkin</div>
+      <div class="rsvp-radio" data-val="tidak" onclick="selectRsvp(this)">❌ Tidak Hadir</div>
+    </div>
+    <button class="rsvp-btn" onclick="submitRsvp()">Kirim Ucapan 💌</button>
+  </div>
+
+  <div class="rsvp-success" id="rsvp-success">
+    Terima kasih atas doa dan ucapan Anda! 🌸<br>
+    <span style="font-size:1rem;font-family:'Jost',sans-serif;opacity:.7">Kehadiran Anda sangat berarti bagi kami.</span>
+  </div>
+
+  <!-- Wall ucapan -->
+  <div id="ucapan-wall" style="margin-top:32px;display:flex;flex-direction:column;gap:12px"></div>
+</section>
+
+<!-- ══════════════ CLOSING QUOTE ══════════════ -->
+<section class="reveal">
+  <div class="quote-block" style="background:linear-gradient(135deg,var(--rose2)30%,var(--cream2))">
+    <span class="quote-mark" style="color:var(--rose);">"</span>
+    <p class="quote-text" style="color:var(--brown)">
+      Dua jiwa yang bersatu bukan sekadar perayaan — melainkan janji abadi
+      untuk saling menjaga, menguatkan, dan mencintai dalam setiap musim kehidupan.
+    </p>
+    <p class="quote-source">— Aditya & Rika</p>
+  </div>
+</section>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>
+  <div class="footer-leaf">🌿 🌸 🌿</div>
+  <div class="footer-names">Aditya & Rika</div>
+  <p class="footer-msg">13 Juni 2026 · Mojokerto · Dengan penuh cinta</p>
+  <div style="margin-top:32px;font-size:.7rem;opacity:.3;letter-spacing:.15em">
+    #AdityaRikaForever · #AkadNikah2026
+  </div>
 </footer>
 
+<!-- ══════════════ SCRIPTS ══════════════ -->
 <script>
-document.addEventListener('DOMContentLoaded',()=>{
-    // ✅ Inisialisasi Cursor Effect dengan target yang benar
-    new cursoreffects.ghostCursor({
-        colors:["#7f1d1d","#b91c1c","#ef4444"],
-        element: document.documentElement,  // ✅ Target seluruh viewport
-        size: 8,
-        density: 15,  // ✅ Lebih banyak partikel
-        opacity: 0.8,
-        speed: 0.5
-    });
-    
-    // ✅ Intersection Observer untuk animasi scroll
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('active');
-            }
+  // ── Open invitation
+  function openInvitation() {
+    document.getElementById('envelope-screen').classList.add('hidden');
+    spawnPetals();
+  }
+
+  // ── Petals
+  const petalColors = ['#c97b84','#e8b4b8','#4a6741','#7a9e72','#b8975a','#f5d6c8'];
+  function spawnPetals() {
+    const c = document.getElementById('petals-container');
+    for (let i = 0; i < 18; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.background = petalColors[Math.floor(Math.random() * petalColors.length)];
+      p.style.animationDuration = (6 + Math.random() * 8) + 's';
+      p.style.animationDelay = (Math.random() * 6) + 's';
+      p.style.transform = `rotate(${Math.random()*360}deg)`;
+      p.style.width = (12 + Math.random() * 14) + 'px';
+      p.style.height = (16 + Math.random() * 16) + 'px';
+      c.appendChild(p);
+    }
+  }
+
+  // ── Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => observer.observe(r));
+
+  // ── Progress bar
+  window.addEventListener('scroll', () => {
+    const s = document.documentElement;
+    const pct = (s.scrollTop / (s.scrollHeight - s.clientHeight)) * 100;
+    document.getElementById('progress').style.width = pct + '%';
+  });
+
+  // ── Countdown
+  const weddingDate = new Date('2026-06-13T08:00:00');
+  function updateCountdown() {
+    const now  = new Date();
+    const diff = weddingDate - now;
+    if (diff <= 0) {
+      document.querySelector('.countdown-wrap').innerHTML =
+        '<p style="font-family:Cormorant Garamond,serif;font-size:1.6rem;color:var(--rose)">🎉 Hari Bahagia Telah Tiba!</p>';
+      return;
+    }
+    const days  = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins  = Math.floor((diff % 3600000) / 60000);
+    const secs  = Math.floor((diff % 60000) / 1000);
+    document.getElementById('cd-days').textContent  = String(days).padStart(2,'0');
+    document.getElementById('cd-hours').textContent = String(hours).padStart(2,'0');
+    document.getElementById('cd-mins').textContent  = String(mins).padStart(2,'0');
+    document.getElementById('cd-secs').textContent  = String(secs).padStart(2,'0');
+  }
+  updateCountdown();
+  setInterval(updateCountdown, 1000);
+
+  // ══════════════════════════════════════════════
+  //  GOOGLE SHEETS CONFIG
+  //  Ganti URL di bawah dengan URL dari Apps Script
+  //  setelah Anda deploy sebagai Web App
+  // ══════════════════════════════════════════════
+  const SCRIPT_URL = "PASTE_APPS_SCRIPT_URL_DISINI";
+
+  // ── RSVP
+  let rsvpChoice = 'hadir';
+  function selectRsvp(el) {
+    document.querySelectorAll('.rsvp-radio').forEach(r => r.classList.remove('selected'));
+    el.classList.add('selected');
+    rsvpChoice = el.dataset.val;
+  }
+
+  // ── Tambah ucapan ke wall UI
+  function addCardToWall(name, message, status, prepend = true) {
+    const wall  = document.getElementById('ucapan-wall');
+    const card  = document.createElement('div');
+    card.style.cssText = 'background:var(--light);border:1px solid rgba(184,151,90,.2);border-radius:12px;padding:20px 24px;text-align:left;animation:fadeUp .5s ease';
+    const badge = status === 'Hadir'       ? '✅ Hadir'
+                : status === 'Mungkin'     ? '🤔 Mungkin'
+                : status === 'Tidak Hadir' ? '❌ Tidak Hadir'
+                : status === 'hadir'       ? '✅ Hadir'
+                : status === 'mungkin'     ? '🤔 Mungkin'
+                :                            '❌ Tidak Hadir';
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <strong style="font-family:'Cormorant Garamond',serif;font-size:1.1rem;color:var(--brown)">${name}</strong>
+        <span style="font-size:.72rem;color:var(--gold);letter-spacing:.1em">${badge}</span>
+      </div>
+      ${message ? `<p style="font-size:.85rem;line-height:1.7;color:var(--text);opacity:.75">${message}</p>` : ''}
+    `;
+    if (prepend) wall.prepend(card); else wall.append(card);
+  }
+
+  // ── Load ucapan dari Google Sheets saat halaman terbuka
+  async function loadUcapan() {
+    if (!SCRIPT_URL || SCRIPT_URL.includes('PASTE_')) return;
+    try {
+      const res  = await fetch(`${SCRIPT_URL}?action=get`);
+      const json = await res.json();
+      if (json.status === 'ok' && json.data.length > 0) {
+        const wall = document.getElementById('ucapan-wall');
+        wall.innerHTML = '';
+        const label = document.createElement('p');
+        label.style.cssText = 'font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:16px';
+        label.textContent = `✦ ${json.data.length} Ucapan Telah Masuk ✦`;
+        wall.appendChild(label);
+        json.data.forEach(d => addCardToWall(d.name, d.message, d.status, false));
+      }
+    } catch (err) {
+      console.warn('Gagal load ucapan:', err);
+    }
+  }
+
+  // ── Kirim RSVP ke Google Sheets
+  async function submitRsvp() {
+    const name = document.getElementById('rsvp-name').value.trim();
+    const msg  = document.getElementById('rsvp-msg').value.trim();
+    if (!name) { alert('Mohon isi nama Anda 😊'); return; }
+
+    const btn = document.querySelector('.rsvp-btn');
+    btn.textContent = 'Mengirim… 🌸';
+    btn.disabled = true;
+
+    const statusMap = { hadir: 'Hadir', mungkin: 'Mungkin', tidak: 'Tidak Hadir' };
+    const payload = {
+      name,
+      message: msg,
+      status:  statusMap[rsvpChoice] || rsvpChoice,
+      device:  navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop'
+    };
+
+    // Tampilkan dulu di wall (optimistic UI)
+    addCardToWall(name, msg, rsvpChoice);
+
+    // Sembunyikan form, tampilkan sukses
+    document.getElementById('rsvp-form').style.display = 'none';
+    document.getElementById('rsvp-success').style.display = 'block';
+
+    // Kirim ke Google Sheets di background
+    if (SCRIPT_URL && !SCRIPT_URL.includes('PASTE_')) {
+      try {
+        await fetch(SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify(payload)
         });
-    }, { threshold: 0.1 });
-    
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    
-    // === LEAFLET MAP INITIALIZATION ===
-    const map = L.map('map').setView([44.2, 12.0], 8);
+      } catch (err) {
+        console.warn('Gagal kirim ke Sheets (data tetap tampil di UI):', err);
+      }
+    } else {
+      console.info('ℹ️ SCRIPT_URL belum diisi — data hanya tampil di UI, belum tersimpan ke Sheets.');
+    }
+  }
 
-    // Base layer (OpenStreetMap)
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-
-    // ✅ Custom red icon tanpa trailing spaces
-    const redIcon = L.icon({
-        iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
-        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
-        iconSize: [25, 41],
-        iconAnchor: [12, 41]
-    });
-
-    // === MARKERS WITH STORY ===
-    L.marker([44.3537, 11.7140], {icon: redIcon})
-    .addTo(map)
-    .bindPopup(`
-    <h3 style="color:#dc2626;">Imola (1499)</h3>
-    <p>
-    Imola menjadi salah satu kota pertama yang ditaklukkan.
-    Borgia memanfaatkan dukungan militer Prancis.
-    Alih-alih menghancurkan struktur lokal, ia mempertahankan
-    administrasi untuk stabilitas cepat.
-    </p>
-    `);
-
-    L.marker([44.2227, 12.0407], {icon: redIcon})
-    .addTo(map)
-    .bindPopup(`
-    <h3 style="color:#dc2626;">Forlì (1500)</h3>
-    <p>
-    Forlì dipertahankan oleh Caterina Sforza.
-    Setelah pengepungan intens, kota jatuh.
-    Kemenangan ini memperkuat reputasi militer Borgia
-    sebagai condottiero efektif.
-    </p>
-    `);
-
-    L.marker([44.1391, 12.2464], {icon: redIcon})
-    .addTo(map)
-    .bindPopup(`
-    <h3 style="color:#dc2626;">Cesena (1502)</h3>
-    <p>
-    Setelah stabilisasi wilayah, Borgia menunjuk Remirro de Orco
-    untuk menegakkan hukum dengan keras.
-    Eksekusi publik Remirro kemudian digunakan untuk
-    membangun citra keadilan tegas.
-    </p>
-    `);
-});
+  // Jalankan load ucapan setelah halaman siap
+  window.addEventListener('load', loadUcapan);
 </script>
-
 </body>
 </html>
